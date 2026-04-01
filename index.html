@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Livro de Enoque | Player Interativo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+        :root {
+            --bg-color: #0b0c10;
+            --panel-bg: #1f2833;
+            --text-main: #c5c6c7;
+            --accent-gold: #f3a953;
+            --accent-hover: #ffc17a;
+            --font-title: 'Cinzel', serif; /* Mudei para a nova fonte épica */
+            --font-body: 'Arial', sans-serif; /* Mantenha a fonte do corpo do texto como estava */
+            --font-text: 'Courier New', Courier, monospace;
+            --font-classic: 'Cormorant Garamond', serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700&display=swap');
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-text);
+            margin: 0;
+            padding: 0; /* Removido para as faixas colarem nas bordas */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            /* Trava o tamanho exato da tela */
+            height: 100vh; 
+            overflow: hidden; /* Impede a página inteira de rolar */
+            background-image: radial-gradient(circle at center, #1f1b2e, #0b0c10);
+            box-sizing: border-box;
+
+            /* As Faixas Douradas Cinematográficas */
+            border-top: 12px solid;
+            border-bottom: 12px solid;
+            border-image: linear-gradient(to right, #875815, #f9e29c, #c48c31, #f9e29c, #875815) 1;
+        }
+        /* --- A ARTE PRINCIPAL (BANNER CENTRAL) --- */
+        .arte-principal {
+            display: block; 
+            margin: 0 auto; /* Isso faz a imagem ficar perfeitamente no centro */
+            width: 100%;
+            max-width: 800px; /* Impede que a imagem fique gigante na tela do computador */
+            height: auto;
+            
+            /* Detalhes para ficar igual à sua imagem de referência: */
+            border: 2px solid var(--accent-gold); /* Borda clarinha */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 15px rgba(243, 169, 83, 0.4);
+        }
+
+        .player-container {
+            background-color: var(--panel-bg);
+            border: 2px solid var(--accent-gold);
+            border-radius: 5px;
+            box-shadow: 0 0 40px rgba(243, 169, 83, 0.2);
+            
+            /* Ajustes para caber na tela nova */
+            width: 90%; 
+            max-width: 90%;
+            height: 88vh; /* Ocupa 88% da tela, deixando as faixas douradas respirarem */
+            
+            display: flex;
+            flex-direction: column;
+            
+            /* A mágica da rolagem interna: */
+            overflow-y: auto; 
+            overflow-x: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.6);
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+       h1 {
+            font-family: var(--font-title);
+            margin: 0;
+            font-size: 5rem;
+            letter-spacing: 2px;
+            /* Efeito de Ouro Metálico */
+            background: linear-gradient(to bottom, #f9e29c 0%, #c48c31 50%, #875815 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            /* A mágica da sombra corrigida: */
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.8));
+        }
+
+        .subtitle {
+            font-size: 2rem;
+            letter-spacing: 3px;
+            margin-top: 5px;
+        }
+
+        .top-section, .bottom-section {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 2rem;
+            gap: 2rem;
+        }
+
+        .bottom-section {
+            display: flex;
+            flex-direction: column; /* Isso faz os itens ficarem um em cima do outro */
+            align-items: center;
+            padding: 2rem;
+            gap: 2rem;
+            border-top: 1px dashed rgba(243, 169, 83, 0.3);
+            margin-top: 1rem;
+        }
+
+        /* CAPA E CONTROLES */
+        .cover-wrapper {
+            width: 100%;
+            max-width: 450px; /* Limita o tamanho para não ficar gigante */
+            aspect-ratio: 1 / 1; /* A MÁGICA: Força a ser um quadrado perfeito! */
+            margin: 0 auto;
+            border-radius: 10px;
+            
+            /* A imagem entra BEM ATRÁS do player agora! */
+            background-image: url('recursos/CapaOLivredeEnoque.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
+            border: 2px solid rgba(243, 169, 83, 0.4); /* Uma borda dourada sutil */
+            display:flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* ========================================= */
+        /* TEXTOS DENTRO DO PLAYER DE VIDRO          */
+        /* ========================================= */
+
+        /* 1. O "tocando agora" (em itálico clássico) */
+        .vidro-label-tocando {
+            font-family: var(--font-classic);
+            font-style: italic;
+            font-weight: 400;
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.6); /* Branco suave */
+            margin: 0;
+            text-align: center;
+        }
+
+        /* 2. O Nome da Música (Forte e Épico) */
+        .vidro-nome-musica {
+            font-family: var(--font-title);
+            font-weight: 600;
+            font-size: 1.4rem;
+            color: #ffffff; /* Branco brilhante */
+            letter-spacing: 1px;
+            margin: 5px 0 15px 0;
+            text-align: center;
+            text-transform: uppercase; /* Força tudo a ficar em MAIÚSCULAS igual a arte */
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        /* 3. Os números do tempo da barra (0:04 / 5:24) */
+        .vidro-tempo-musica {
+            font-family: var(--font-classic);
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--accent-gold); /* Usando a sua cor dourada! */
+            margin-bottom: 5px;
+            text-align: right; /* Alinha os números à direita da barra */
+            width: 100%; /* Garante que o alinhamento funcione */
+        }
+
+        .cover-image {
+            width: 100%;
+            max-width: 300px;
+            border: 3px solid var(--accent-gold);
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        /* A janela fixa por onde o texto vai passar */
+        .now-playing-container {
+            width: 100%;
+            max-width: 300px; /* Ajuste se quiser a janela mais larga ou estreita */
+            margin: 0 auto;
+            overflow: hidden; /* Esconde o texto que sair da janela */
+            white-space: nowrap; /* Impede o texto de quebrar linha */
+            position: relative;
+            height: 2.5rem; /* Trava a altura do painel */
+        }
+
+        /* O texto animado */
+        .now-playing {
+            display: inline-block;
+            margin-top: 5px;
+            font-family: var(--font-title);
+            color: var(--accent-gold);
+            font-size: 1.4rem;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.9);
+            
+            /* Começa o texto fora da tela, à direita */
+            padding-left: 100%; 
+            
+            /* Aplica a animação: 12 segundos, velocidade linear, looping infinito */
+            animation: scroll-left 20s linear infinite;
+        }
+
+        /* O Motor da Animação */
+        @keyframes scroll-left {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+        audio {
+            width: 100%;
+            margin-top: 1rem;
+            outline: none;
+        }
+
+        /* LISTA DE FAIXAS */
+        .tracklist {
+            flex: 1.5;
+            min-width: 300px;
+            max-height: 350px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            padding: 1rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .act-title {
+            font-family: var(--font-title);
+            color: #f3a953;
+            font-weight: bold;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 2px solid rgba(243, 169, 83, 0.4);
+            padding-bottom: 5px;
+        }
+
+        .act-title:first-child {
+            margin-top: 0;
+        }
+
+        .track-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .track-item:hover {
+            background: rgba(243, 169, 83, 0.1);
+            border-left: 3px solid var(--accent-hover);
+        }
+
+        .track-item.active {
+            background: rgba(243, 169, 83, 0.2);
+            border-left: 3px solid var(--accent-gold);
+            color: white;
+            font-weight: bold;
+        }
+
+        /* LETRAS E ARTE SECUNDÁRIA */
+        .lyrics-box {
+            width: 100%; /* Ocupa 100% do limite da caixa abaixo da imagem */
+            box-sizing: border-box; /* Garante que o padding não quebre a largura */
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
+            border-radius: 5px;
+            border-top: 4px solid var(--accent-gold); /* Mudei a borda para cima para combinar com o layout vertical */
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .lyrics-box h3 {
+            margin-top: 0;
+            font-family: var(--font-title);
+            color: var(--accent-gold);
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .lyrics-text {
+            white-space: pre-wrap;
+            font-style: italic;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .secondary-art-wrapper {
+            width: 100%; /* Ocupa 100% do limite da caixa */
+            display: flex;
+            justify-content: center;
+        }
+
+        .secondary-image {
+            width: 100%; 
+            max-height: auto; /* Evita que a imagem fique gigante demais em telas grandes */
+            object-fit: cover; /* Mantém a proporção da imagem bonita */
+            border: 2px solid var(--accent-gold);
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+
+        .secondary-image:hover {
+            opacity: 1;
+        }
+
+        .bottom-section {
+            display: flex;
+            flex-direction: column; /* Coloca a arte em cima e as informações embaixo */
+            align-items: center;
+            padding: 2rem;
+            gap: 2rem;
+            border-top: 1px dashed rgba(243, 169, 83, 0.3);
+            margin-top: 1rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Container que divide PIX e Letras lado a lado */
+        .info-split-section {
+            display: flex;
+            flex-direction: row; 
+            align-items: stretch;
+            width: 100%;
+            gap: 2rem;
+        }
+
+        /* Para telas menores (Celulares), empilha o PIX e a Letra */
+        @media (max-width: 768px) {
+            .info-split-section {
+                flex-direction: column;
+            }
+        }
+
+        /* --- PAINEL DO PIX (Esquerda) --- */
+        .pix-panel {
+            flex: 1; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.5); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            border: 1px solid rgba(243, 169, 83, 0.1); 
+            border-top: 3px solid var(--accent-gold);
+            border-bottom: 3px solid var(--accent-gold);
+        }
+
+        .pix-title {
+            font-family: var(--font-title);
+            color: var(--accent-gold);
+            margin: 0 0 15px 0;
+            font-size: 1.2rem;
+            text-align: center;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(243, 169, 83, 0.3); /* Linha divisória igual à das letras */
+            padding-bottom: 10px;
+            width: 100%;
+        }
+
+        .pix-qrcode {
+            width: 100%;
+            max-width: 170px;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+            border: 2px solid var(--accent-gold);
+        }
+
+        /* O seu nome para confirmação do PIX */
+        .pix-name {
+            margin-top: 15px;
+            font-family: var(--font-classic);
+            color: #f3a953;
+            font-size: 1.3rem;
+            font-style: italic;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        /* --- PAINEL DAS LETRAS (Direita) --- */
+        .lyrics-box {
+            flex: 1.5; /* Deixei um pouco maior que o PIX para dar mais espaço à leitura */
+            box-sizing: border-box;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2rem;
+            border-radius: 8px;
+            border-top: none; /* Removemos aquela borda de topo antiga */
+            border-left: 3px solid var(--accent-gold); /* Nova borda lateral */
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+
+        .lyrics-box h3 {
+            margin-top: 0;
+            font-family: var(--font-title);
+            color: var(--accent-gold);
+            border-bottom: 1px solid rgba(243, 169, 83, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .lyrics-text {
+            white-space: pre-wrap;
+            font-family: var(--font-classic);
+            font-style: italic;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: #d1d1d1;
+        }
+
+        /* SCROLLBARS */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-gold); border-radius: 4px; }
+        /* PLAYER CUSTOMIZADO (GLASS & GOLD) */
+        /* ===== O NOVO PLAYER DE VIDRO ===== */
+        .custom-player {
+            width: 88%;
+            height: 88%;
+            padding: 1.5rem 1rem;
+            aspect-ratio: 1 / 1;
+            max-width: 450px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly;
+            gap: 20px; /* Espaço entre os elementos */
+            
+            /* Efeito Glassmorphism da Imagem */
+            background: rgba(10, 10, 15, 0.45);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255,255,255,0.02);
+        }
+
+        .player-header {
+            text-align: center;
+            width: 100%;
+        }
+
+        .glass-title {
+            font-family: var(--font-title);
+            color: #fde4a9;
+            margin: 0 0 10px 0;
+            font-size: 2.2rem;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+            background: linear-gradient(to bottom, #fde4a9 0%, #d89f3c 50%, #9e6d1f 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(2px 2px 6px rgba(0, 0, 0, 0.9));
+        }
+
+        .now-playing-label {
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            color: #b0b0b0;
+            font-size: 1rem;
+        }
+
+        .now-playing {
+            margin-top: 5px;
+            font-family: var(--font-title);
+            color: var(--accent-gold);
+            font-size: 1.4rem;
+            height: auto;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.9);
+        }
+
+        /* O Botão de Ouro Gigante e Centralizado */
+        .gold-btn {
+            background: linear-gradient(to bottom, #fde4a9 0%, #d89f3c 50%, #9e6d1f 100%);
+            border: none;
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: #1a1a1a;
+            font-size: 3rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6), inset 0 3px 6px rgba(255,255,255,0.6);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            padding: 0; /* Remove preenchimentos fantasiados que quebram o centro */
+        }
+
+        .gold-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(243, 169, 83, 0.6), inset 0 3px 6px rgba(255,255,255,0.8);
+        }
+
+        /* A Mágica para centralizar perfeitamente o ícone */
+        #btn-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 0;
+            margin-left: 8px; /* Compensa o peso visual do triângulo de Play */
+        }
+        
+        .progress-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end; /* Joga o tempo para a direita */
+            gap: 10px;
+        }
+
+        .time-display {
+            font-family: var(--font-title);
+            font-size: 1rem;
+            color: #fde4a9;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px black;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 14px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.9);
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, #9e6d1f, #d89f3c, #fde4a9);
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(243, 169, 83, 0.5);
+            position: relative;
+        }
+
+        /* A "bolinha" brilhante na ponta da barra de progresso */
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            right: -7px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            background: linear-gradient(to bottom, #fde4a9, #d89f3c);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(253, 228, 169, 0.8), inset 0 1px 2px rgba(255,255,255,0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="player-container">
+        <div class="header">
+            <h1>O LIVRO de ENOQUE</h1>
+            <div class="subtitle">A ÓPERA ROCK COMPLETA</div>
+        </div>
+        <div style="padding: 1rem 1rem;">
+            <img src="recursos/CapaOLivredeEnoque.png" alt="O Livro de Enoque" class="arte-principal">
+        </div>
+
+        <div class="top-section">
+            <div class="cover-wrapper">
+                <div class="custom-player">
+                    <div class="player-header">
+                        <h2 class="glass-title">O LIVRO DE ENOQUE</h2>
+                        <span class="now-playing-label">tocando agora</span>
+                        <div class="now-playing-container">
+                            <div class="now-playing" id="now-playing-title">Escolha uma faixa...</div>
+                        </div>
+                    </div>
+
+                    <audio id="main-audio"></audio>
+                    
+                    <button id="play-pause-btn" class="gold-btn">
+                        <span id="btn-icon">▶</span>
+                    </button>
+                    
+                    <div class="progress-wrapper">
+                        <span class="time-display" id="time-display">0:00 / 0:00</span>
+                        <div class="progress-container" id="progress-container">
+                            <div class="progress-bar" id="progress-bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tracklist">
+                <div class="act-title">ATO I: A Queda e a Corrupção</div>
+                <div class="track-item" onclick="playTrack(this, 'recursos/01 - O Juramento no Monte Hermon (A descida dos anjos).mp3', 'O Juramento no Monte Hermon (A descida dos anjos)')">1. O Juramento no Monte Hermon</div>
+                <div class="track-item" onclick="playTrack(this, 'recursos/02 - O Segredo Revelado (Azazel ensina artes proibidas).mp3', 'O Segredo Revelado (Azazel ensina artes proibidas)')">2. O Segredo Revelado</div>
+                <div class="track-item" onclick="playTrack(this, 'recursos/03 - O Despertar dos Gigantes (O nascimento dos Nefilins).mp3', 'O Despertar dos Gigantes (O nascimento dos Nefilins)')">3. O Despertar dos Gigantes</div>
+                <div class="track-item" onclick="playTrack(this, 'recursos/04 - O Clamor da Terra (As almas pedem socorro aos Arcanjos).mp3', 'O Clamor da Terra (As almas pedem socorro aos Arcanjos)')">4. O Clamor da Terra</div>
+
+                <div class="act-title">ATO II: O Escriba e o Julgamento</div>
+                <div class="track-item" onclick="playTrack(this, 'recursos/05 - O Chamado de Enoque.mp3', 'O Chamado de Enoque')">5. O Chamado de Enoque</div>
+                <div class="track-item" onclick="playTrack(this, 'recursos/06 - A Petição dos Caídos.mp3', 'A Petição dos Caídos')">6. A Petição dos Caídos</div>
+                <div class="track-item" onclick="playTrack(this, 'recursos/07 - A Sentença de Fogo.mp3', 'A Sentença de Fogo')">7. A Sentença de Fogo</div>
+
+                <div class="act-title">ATO III: A Viagem Cósmica e o Legado</div>
+                <div class="track-item" onclick="playTrack(this, 'recursos/08 - A Ascensão (Pelos Céus).mp3', 'A Ascensão (Pelos Céus)')">8. A Ascensão (Pelos Céus)</div>
+                <div class="track-item" onclick="playTrack(this, 'recursos/09 - Os Guardiões das Estrelas.mp3', 'Os Guardiões das Estrelas')">9. Os Guardiões das Estrelas</div>
+                <div class="track-item" onclick="playTrack(this, 'recursos/10 - O Trono de Glória.mp3', 'O Trono de Glória')">10. O Trono de Glória</div>
+                <div class="track-item" onclick="playTrack(this, 'recursos/11 - O Dilúvio Iminente.mp3', 'O Dilúvio Iminente')">11. O Dilúvio Iminente</div>
+                <div class="track-item" onclick="playTrack(this, 'recursos/12 - O Legado do Escriba (Metatron).mp3', 'O Legado do Escriba')">12. O Legado do Escriba</div>
+            </div>
+        </div>
+
+        <div class="bottom-section">
+            
+            <div class="secondary-art-wrapper">
+                <img src="recursos/ContraCapaOLivroEnoque.png" alt="Artes dos Atos" class="secondary-image" onerror="this.src='https://via.placeholder.com/400x250/1a1a1a/8b0000?text=Arte+dos+Atos+Aqui'">
+            </div>
+
+            <div class="info-split-section">
+                
+                <div class="pix-panel">
+                    <h3 class="pix-title">APOIE A ÓPERA ROCK</h3>
+                    <img src="recursos/QrcodeAlexPontes.jpeg" alt="QR Code PIX" class="pix-qrcode">
+                    <div class="pix-name">Alexsandro Z Pontes</div>
+                </div>
+
+                <div class="lyrics-box">
+                    <h3 id="lyrics-title">Letra da Música</h3>
+                    <div class="lyrics-text" id="lyrics-content">
+                        Clique em uma música acima para acompanhar a letra da sua Ópera Rock!
+                    </div>
+                </div>
+
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+        // BANCO DE LETRAS - Cole as letras completas aqui dentro das aspas!
+        const letras = {
+            "recursos/01 - O Juramento no Monte Hermon (A descida dos anjos).mp3": `
+            [Verse 1]
+            No pico escuro do Monte Hermon
+            Duzentos anjos descem do céu
+            Trocando a luz pelo nosso som
+            Rasgando de vez o sagrado véu.
+            Semyaza levanta a mão e diz:
+            "Quem vem comigo não volta atrás!"
+
+            [Chorus]
+            Juramento de sangue e dor!
+            No Monte Hermon nasce a rebelião
+            Esquecendo o Grande Criador
+            Os Anjos Vigilantes tocam o chão!
+            Ah, a queda começou!`,
+            
+            "recursos/02 - O Segredo Revelado (Azazel ensina artes proibidas).mp3":` 
+            [Verse 1]
+            Azazel trouxe o fogo e o metal
+            Ensinou a forjar a espada e o punhal
+            Pintou os olhos da humanidade
+            Plantou a semente da fútil vaidade!
+            [Chorus]
+            Magia negra, espelhos e ilusão!
+            O mundo dança na palma da mão!
+            A inocência foi deixada para trás
+            Sob o feitiço dos anjos letais!
+            [Guitar Solo]
+            Queime na forja!`,
+
+            "recursos/03 - O Despertar dos Gigantes (O nascimento dos Nefilins).mp3":`
+            [Verse 1]
+            Da união proibida nasceu o terror
+            Gigantes marcham causando dor
+            Os Nefilins com fome sem fim
+            Devoram as feras, olham pra mim!
+
+            [Verse 2]
+            Esvaziam os rios, devoram o gado
+            Onde eles pisam, o chão é queimado
+            Trezentos côvados de pura maldade
+            Esmagam os muros da nossa cidade!
+
+            [Verse 3]
+            Já não há trigo, já não há pão
+            A fome cega não tem compaixão
+            Se voltam agora contra a criação
+            Bebendo o sangue espalhado no chão!
+
+            [Verse 4]
+            Ouça os seus passos, o chão a rachar!
+            Não há esconderijo, não há onde estar!
+            A sombra gigante escurece o céu
+            A humanidade rasgada num véu!
+
+            [Pre-Chorus]
+            O fôlego acaba...
+            A terra estremece...
+            O monstro se aproxima...
+            E a luz desaparece!
+
+            [Chorus]
+            Sangue na terra, o mundo a tremer!
+            Não há mais nada que possam comer!
+            A monstruosidade tomou o poder
+            E a humanidade começou a morrer!
+            
+            [Bridge]
+            Escondam as crianças... prendam a respiração...
+            Eles sentem o medo... eles ouvem o coração...
+                        
+            Estão aqui!
+            Corram dos Gigantes!
+            Corram! Corram!
+            Eles vão devorar tudo!`,
+
+            "recursos/04 - O Clamor da Terra (As almas pedem socorro aos Arcanjos).mp3":`
+            [Verse 1]
+            Miguel, Uriel, Gabriel a escutar
+            Do alto das nuvens ouvem chorar
+            O sangue grita da terra ao céu
+            Um mundo envolto num cruel véu.
+
+            [Chorus]
+            Salve-nos, ó anjos da luz!
+            O peso do mundo é a nossa cruz!
+            Levem o pranto ao Trono Maior
+            Livrem a terra de tanto terror!`,
+            
+            "recursos/05 - O Chamado de Enoque.mp3":`
+            [Verse 1]
+            Enoque, o justo, de caneta na mão
+            Longe do caos e da corrupção
+            Uma voz ecoa na brisa sutil
+            Desperta o escriba do mundo hostil.
+
+            [Verse 2]
+            O mundo afunda em trevas reais
+            Mas sua alma recusa os rituais
+            Deixe sua casa, deixe seu lar
+            O cosmos inteiro quer te escutar.
+
+            [Verse 3]
+            A pena sagrada te foi confiada
+            A tua palavra será a espada
+            Levanta, escriba, o tempo acabou
+            A voz do Altíssimo te convocou.
+
+            [Chorus]
+            Escreva, Enoque, a palavra de Deus!
+            Seja o mensageiro dos altos céus!
+            Vá aos caídos, entregue o papel
+            Diga que perderam as chaves do céu!
+
+
+            [Verse 4]
+            O peso da luz sobre os ombros mortais
+            Enoque caminha por véus celestiais
+            O medo recua, a coragem acende
+            O plano divino ele agora compreende.
+
+            [Verse 5]
+            Os anjos rebeldes começam a tremer
+            Ao ver um humano com tanto poder
+            Trazendo o papiro selado em dor
+            A triste sentença do Criador.
+
+            [Verse 6]
+            Não há mais perdão, não há mais clamor
+            O choro dos fortes não move o Senhor
+            Enoque se ergue diante do abismo
+            Julgando de vez o seu falso heroísmo.
+
+            [Chorus]
+            Escreva, Enoque, a palavra de Deus!
+            Seja o mensageiro dos altos céus!
+            Vá aos caídos, entregue o papel
+            Diga que perderam as chaves do céu!
+            Você é a voz!`,
+            
+            "recursos/06 - A Petição dos Caídos.mp3":`
+            [Verse 1]
+            Os Vigilantes tremem no pó
+            Fingem que o peito se aperta num nó
+            Baixam o rosto escondendo o olhar
+            Tentando o bondoso escriba enganar.
+
+            [Verse 2]
+            Semyaza soluça, Azazel também
+            Derramam um pranto que não vai além
+            A espada de fogo os faz tremer
+            Mas choram apenas por medo de arder.
+
+            [Verse 3]
+            "Escreve o pedido em folhas de dor"
+            Sussurram com falso e doce louvor
+            "Diz ao Deus Santo que a gente errou
+            Que a luz das estrelas nos abandonou..."
+
+            [Pre-Chorus]
+            Nós fomos tentados pela emoção...
+            Traz de volta a nossa antiga mansão...
+
+            [Chorus]
+            Enoque, interceda por nós!
+            Devolva a coroa, devolva a voz!
+            Leva esse choro ao nosso Senhor
+            Nós somos as vítimas desse terror!
+            Escreva a nossa carta...
+            
+            [Bridge]
+            E enquanto o escriba se vira pra ir...
+            Com a carta sagrada que vai subir...
+            Nas sombras da terra, sem ninguém notar...
+            Azazel no escuro começa a sorrir.
+            
+            Ele acreditou...
+            O tolo escriba acreditou...`,
+            
+            "recursos/07 - A Sentença de Fogo.mp3":`
+            [Verse 1]
+            O escriba dorme e tem a visão
+            De fogo e gelo, de destruição
+            A resposta divina não traz perdão
+            Aos anjos que trouxeram a corrupção.
+
+            [Verse 2]
+            O anjo caído pediu compaixão
+            Mas Deus não atende à sua oração
+            O mal que plantaram na terra brotou
+            E o sangue dos puros a terra manchou.
+
+            [Verse 3]
+            O abismo se abre num poço sem fundo
+            Pra prender os mestres do submundo
+            Setenta gerações eles vão amargar
+            Até o juízo final despertar.
+
+            [Chorus]
+            Não haverá paz, não haverá luz!
+            Cada um carrega a própria cruz!
+            Ficarão presos nas trevas do chão
+            Até o dia do Grande Julgamento, em vão!
+            Estão condenados!`,
+            
+            "recursos/08 - A Ascensão (Pelos Céus).mp3":`
+            [Verse 1]
+            Elevado aos céus num vento de fogo
+            O peso da Terra não é mais meu jugo!
+            O grito do abismo ficou para trás
+            Agora respiro um oceano de paz!
+
+            [Verse 2]
+            As nuvens me puxam, o vento me leva
+            Deixando pra trás a agonia e a treva
+            É mais que a visão de um mero mortal
+            É o puro êxtase no mar de cristal!
+            
+            Os horrores do mundo perderam a cor
+            Diante da face do meu Criador!
+            O relâmpago dança, mas não traz pavor
+            É apenas a arte do Santo Autor!
+
+            [Chorus]
+            Navego no alívio da estrela cadente!
+            Banhado por ondas de luz reluzente!
+            O prazer do infinito se abre pra mim
+            Uma paz absoluta, um cosmos sem fim!            
+
+            [Verse 3]
+            Deixei de ser carne, a mente transcende
+            Um amor infinito que a alma compreende
+            Não há mais gigantes, espada ou terror
+            Apenas a glória, a luz e o calor.
+            
+            Não há mais pranto, não há mais noite!
+            Longe da terra e de seu açoite!
+            A dor da matéria perdeu o sentido
+            Num abraço cósmico eu fui acolhido!            
+
+            [Chorus]
+            Navego no alívio da estrela cadente!
+            Banhado por ondas de luz reluzente!
+            O prazer do infinito se abre pra mim
+            Uma paz absoluta, um cosmos sem fim!
+            
+            Um cosmos sem fim...
+            
+            [End]`,
+            
+            "recursos/09 - Os Guardiões das Estrelas.mp3":`
+            [Verse 1]
+            Onde as estrelas vão descansar
+            Onde os ventos nascem pra soprar
+            Vejo os astros que ousam falhar
+            Presos em chamas no abismo estelar.
+
+            [Verse 2]
+            Sete planetas fora do eixo
+            Presos na dor, não há mais lampejo
+            Desobedeceram a ordem do véu
+            E agora queimam nos confins do céu.
+
+            [Chorus]
+            Guardiões cósmicos, ordem do espaço!
+            Cada cometa no seu compasso!
+            O poder divino rege o clarão
+            E pune a estrela que traz traição!
+
+            [Chorus]
+            Guardiões cósmicos
+
+            [Verse 3]
+            Correntes de fogo prendendo o vazio
+            Um eco distante, um castigo sombrio
+            As forças rebeldes em forma de luz
+            Carregam no escuro a sua própria cruz.
+
+            [Verse 4]
+            Arcanjos vigiam a porta do breu
+            Guardando o abismo que a noite escondeu
+            O caos prisioneiro não pode voltar
+            Até que o juízo final despertar!            
+
+            [Chorus]
+            Guardiões cósmicos, ordem do espaço!
+            Cada cometa no seu compasso!
+            O poder divino rege o clarão
+            E pune a estrela que traz traição!`,
+            
+            "recursos/10 - O Trono de Glória.mp3":`
+            [Verse 1]
+            Rios de fogo ao redor do Trono
+            Onde o Ancião de Dias não tem sono
+            Roupas mais brancas que a própria neve
+            Diante Dele, a alma se eleva.
+
+            [Verse 2]
+            Dez mil vezes dez mil anjos ao redor
+            Cantando em coro o louvor maior
+            Rodas de chamas giram sem parar
+            Seres de luz a tudo observar.
+
+            [Verse 3]
+            A glória brilha mais forte que o sol
+            Um mar de vidro, um divino farol
+            Nem mesmo os serafins ousam olhar
+            A santidade que faz o céu silenciar.
+
+            [Verse 4]
+            Querubins cantam, o éter estremece
+            O medo se esvai, a alma agradece
+            Eu sinto a presença que o sol não contém
+            O Alfa, o Ômega, o eterno Amém.
+
+            [Verse 5]
+            Caio de bruços, sem forças pra erguer
+            O peso da graça me faz entender
+            Uma voz como trovão manda eu me levantar
+            O Arquiteto de Tudo começa a falar!
+
+            [Pre-Chorus]
+            [Choir] Santo...
+            [Choir] Santo...
+            [Choir] Santo é o Senhor!
+
+            [Chorus]
+            Glória! Hosana! O Som celestial!
+            O Rei do Universo, o poder sem igual!
+            O rosto envolto em fogo e clarão
+            E a terra se curva em adoração!
+            Santo, Santo, Santo!          
+            
+            Santo, Santo, Santo...
+            O Alfa e o Ômega...
+            Amém.`,
+            
+            "recursos/11 - O Dilúvio Iminente.mp3":`
+            [Verse 1]
+            Uma visão do futuro que vem
+            Águas caindo pra lavar o além
+            A terra corrupta precisa afundar
+            Para um novo mundo poder respirar.
+
+            [Verse 2]
+            Os rios transbordam, o abismo se racha
+            A ira dos céus é uma forte borracha
+            Apaga os gigantes, afoga a maldade
+            Pra dar nova chance a toda a humanidade.
+
+            [Chorus]
+            O dilúvio chega, o céu vai chorar!
+            Mas a semente de Lameque vai se salvar!
+            A Arca balança na fúria do mar
+            A promessa divina não vai falhar!
+            Vem a tempestade!
+
+
+            [Verse 3]
+            Os céus escurecem, o abismo desperta
+            A fúria das águas agora é a regra certa
+            Gigantes de pedra começam a cair
+            Não há para onde correr ou fugir.
+
+            [Verse 4]
+            As correntes quebram, o vento uiva alto
+            A vida na terra sofre o seu assalto
+            Os anjos caídos assistem o fim
+            O peso da culpa cobrando o festim.
+
+            [Verse 5]
+            No meio das ondas, madeira e alcatrão
+            A Arca flutua na escuridão
+            A fé de Noé é o único farol
+            Enquanto o mundo se esquece do sol.
+
+            [Chorus]
+            O dilúvio chega, o céu vai chorar!
+            Mas a semente de Lameque vai se salvar!
+            A Arca balança na fúria do mar
+            A promessa divina não vai falhar!
+            Vem a tempestade!`,
+            
+            "recursos/12 - O Legado do Escriba (Metatron).mp3":`
+            [Verse 1]
+            O livro está escrito, a história contada
+            A era das sombras por fim dissipada
+            O peso do mundo deixou de existir
+            A luz do universo começa a surgir.
+
+            [Verse 2]
+            A carne mortal virou puro clarão
+            Um ser feito de fogo e constelação
+            Setenta e duas asas cruzando o infinito
+            O nome de Enoque pra sempre bendito.
+
+            [Verse 3]
+            As águas desceram, o abismo fechou
+            A fúria dos céus afinal repousou
+            Lá do alto do cosmos, ele guarda a promessa
+            De um mundo de paz que agora começa.
+
+            [Chorus]
+            Metatron desperta, o Escriba Divino!
+            A luz que ilumina o nosso destino!
+            O Livro de Enoque pra sempre viverá
+            Nas páginas sagradas que o tempo cantará!
+            O Escriba vive!
+
+            [Bridge]
+            Adeus, velha terra, adeus, velha dor!
+            A alma repousa no eterno esplendor!
+            A glória suprema, a paz sem igual
+            O fim da jornada, o voo imortal!            
+
+            [Chorus]
+            Metatron desperta, o Escriba Divino!
+            A luz que ilumina o nosso destino!
+            O Livro de Enoque pra sempre viverá
+            Nas páginas sagradas que o tempo cantará!
+            O Escriba vive!
+            
+            O Escriba vive...
+            A luz prevaleceu...
+            A esperança venceu...`,
+        };
+
+        const audioPlayer = document.getElementById('main-audio');
+        const nowPlayingText = document.getElementById('now-playing-title');
+        const lyricsTitle = document.getElementById('lyrics-title');
+        const lyricsContent = document.getElementById('lyrics-content');
+        let currentTrackItem = null;
+
+        function playTrack(element, audioSource, trackName) {
+            // Atualiza destaque visual
+            if (currentTrackItem) currentTrackItem.classList.remove('active');
+            element.classList.add('active');
+            currentTrackItem = element;
+
+            // Atualiza áudio e título
+            nowPlayingText.innerText = trackName;
+            audioPlayer.src = audioSource;
+            
+            // Atualiza a letra na caixa de texto
+            lyricsTitle.innerText = trackName;
+            if(letras[audioSource]) {
+                lyricsContent.innerText = letras[audioSource];
+            } else {
+                lyricsContent.innerText = "(Letra não adicionada ainda. Adicione no arquivo HTML!)";
+            }
+
+            // Toca a música
+            audioPlayer.play().catch(e => console.log("Aguardando interação"));
+        }
+
+        // Toca próxima música
+        audioPlayer.addEventListener('ended', function() {
+            if (currentTrackItem && currentTrackItem.nextElementSibling) {
+                let next = currentTrackItem.nextElementSibling;
+                if (next.classList.contains('act-title')) next = next.nextElementSibling;
+                if(next && next.classList.contains('track-item')) next.click();
+            }
+        });
+        // CONTROLES DO PLAYER CUSTOMIZADO
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const progressBar = document.getElementById('progress-bar');
+        const progressContainer = document.getElementById('progress-container');
+        const timeDisplay = document.getElementById('time-display');
+
+        // Formatar o tempo (0:00)
+        function formatTime(time) {
+            if (isNaN(time)) return "0:00";
+            const min = Math.floor(time / 60);
+            const sec = Math.floor(time % 60);
+            return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+        }
+
+        // Tocar ou Pausar no botão dourado
+        playPauseBtn.addEventListener('click', () => {
+            if (!audioPlayer.src || audioPlayer.src.endsWith(window.location.pathname)) return; // Evita erro se não tiver música escolhida
+            if (audioPlayer.paused) {
+                audioPlayer.play();
+            } else {
+                audioPlayer.pause();
+            }
+        });
+
+        // Mudar o ícone quando toca ou pausa
+        const btnIcon = document.getElementById('btn-icon');
+
+        // Mudar o ícone e corrigir o alinhamento
+        audioPlayer.addEventListener('play', () => {
+            btnIcon.innerHTML = '⏸';
+            btnIcon.style.marginLeft = '0px'; // O Pause fica perfeito no centro 0x0
+        });
+        
+        audioPlayer.addEventListener('pause', () => {
+            btnIcon.innerHTML = '▶';
+            btnIcon.style.marginLeft = '8px'; // Empurra o Play um pouquinho pra não parecer torto
+        });
+
+        // Atualizar a barra dourada e o tempo
+        audioPlayer.addEventListener('timeupdate', () => {
+            const { currentTime, duration } = audioPlayer;
+            if (duration) {
+                const percent = (currentTime / duration) * 100;
+                progressBar.style.width = `${percent}%`;
+                timeDisplay.innerText = `${formatTime(currentTime)} / ${formatTime(duration)}`;
+            }
+        });
+
+        // Clicar na barra para avançar a música
+        progressContainer.addEventListener('click', (e) => {
+            const width = progressContainer.clientWidth;
+            const clickX = e.offsetX;
+            const duration = audioPlayer.duration;
+            if (duration) {
+                audioPlayer.currentTime = (clickX / width) * duration;
+            }
+        });
+    </script>
+</body>
+</html>
